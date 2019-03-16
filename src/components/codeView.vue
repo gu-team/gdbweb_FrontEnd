@@ -8,7 +8,7 @@
 
 <style>
 #codeView {
-    top: -48px;
+    top: -36px;
     position: relative;
 }
 pre code {

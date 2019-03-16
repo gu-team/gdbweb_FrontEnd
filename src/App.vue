@@ -31,7 +31,7 @@ export default {
   },
   data() {
     return {
-      split: 0.75
+      split: 0.6
     }
   }
 }
