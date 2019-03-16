@@ -6,13 +6,11 @@
 
 <style>
 #header {
-    width: 100%;
-    height: 5%;
-    background-color: aquamarine;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    background: #515a6e91;
+    padding: 0 50px;
+    height: 40px;
+    line-height: 40px;
+    flex: 0 0 auto;
 }
 </style>
 
