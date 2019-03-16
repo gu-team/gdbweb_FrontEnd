@@ -19,6 +19,7 @@
     height: 40px;
     line-height: 40px;
     flex: 0 0 auto;
+    z-index: 999;
 }
 </style>
 

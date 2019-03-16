@@ -10,12 +10,13 @@
 #codeView {
     top: -36px;
     position: relative;
+    pointer-events: none;
 }
 pre code {
+    height: 40rem;
     text-align: left;
     font-size: 18px;
-    overflow-y: auto;
-    height: 40rem;
+    overflow: auto;
 }
 </style>
 
