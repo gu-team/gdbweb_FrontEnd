@@ -9,7 +9,7 @@
         <div slot="left">
           <code-view></code-view>
         </div>
-        <div slot="right" calss="left-split">
+        <div slot="right" calss="right-split">
           <register-view></register-view>
         </div>
       </Split>
@@ -46,11 +46,12 @@ export default {
   color: #2c3e50;
 }
 .demo-split{
-  height: 40.5rem;
+  height: 700px;
+  overflow: auto;
   border: 1px solid #dcdee2;
   background-color: antiquewhite;
 }
-.left-split{
-  padding-left: 0.2rem
+.right-split{
+  padding-left: 0.2rem;
 }
 </style>

@@ -1,22 +1,17 @@
 <template>
 <div id="codeView">
-    <pre v-highlight>
-        <code class="armasm" :class="codeStyle[3]">{{getAsmCode()}}</code>
-    </pre>
+    <pre v-highlight><code class="armasm">{{getAsmCode()}}</code></pre>
 </div>
 </template>
 
 <style>
 #codeView {
-    top: -36px;
-    position: relative;
-    pointer-events: none;
+    height: 600px;
+    overflow: auto;
 }
 pre code {
-    height: 40rem;
     text-align: left;
     font-size: 18px;
-    overflow: auto;
 }
 </style>
 
@@ -25,12 +20,6 @@ export default {
     name: "codeView",
     data() {
         return {
-            codeStyle: [
-                "solarized-dark",
-                "github",
-                "Monokai",
-                "mono-blue"
-            ],
             assemb: [
                 "0x0000000000400da0 <+0>:     push   %rbx",
                 "0x0000000000400da1 <+1>:     cmp    $0x1,%edi",
