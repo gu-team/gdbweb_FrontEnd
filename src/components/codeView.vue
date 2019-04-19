@@ -1,15 +1,13 @@
 <template>
 <div id="codeView">
-    <pre v-highlight><code class="armasm">{{getAsmCode()}}</code></pre>
+    <pre v-highlight><code class="armasm">{{showAsmCode()}}</code></pre>
 </div>
 </template>
 
 <style>
-#codeView {
+pre code {
     height: 600px;
     overflow: auto;
-}
-pre code {
     text-align: left;
     font-size: 18px;
 }
@@ -51,7 +49,7 @@ export default {
         }
     },
     methods: {
-        getAsmCode() {
+        showAsmCode() {
             var asmCode = "";
             for (let i = 0; i < this.assemb.length; i++) {
                 asmCode += i;

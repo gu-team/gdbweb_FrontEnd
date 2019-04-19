@@ -46,7 +46,7 @@ export default {
   color: #2c3e50;
 }
 .demo-split{
-  height: 700px;
+  height: 660px;
   overflow: auto;
   border: 1px solid #dcdee2;
   background-color: antiquewhite;
