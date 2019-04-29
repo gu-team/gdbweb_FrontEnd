@@ -5,11 +5,8 @@
 </template>
 
 <style>
-pre code {
-    height: 600px;
-    overflow: auto;
-    text-align: left;
-    font-size: 18px;
+pre{
+    margin-bottom: 0;
 }
 </style>
 
