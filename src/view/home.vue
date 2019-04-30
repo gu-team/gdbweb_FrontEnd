@@ -1,26 +1,36 @@
 <template>
-    <div class="homeView">
-		<div class="header">
-			<head-er></head-er>
-		</div>
+<div class="homeView">
+	<div class="header">
+		<head-er
+		:uploadelf="click_uploadelf"
+		:start="click_start"
+		:getDisassemble="click_getDisassemble"
+		></head-er>
+	</div>
+	<!-- header -->
 
-        <div class="mainView">
-			<Split v-model="split">
-				<div slot="left" class="codeView">
-					<code-view></code-view>
-				</div>
-				<div slot="right" calss="infoView">
-					<register-view></register-view>
-				</div>
-			</Split>
-        </div>
-    </div>
+	<div class="mainView">
+		<Split v-model="split">
+			<div slot="left" class="codeView">
+				<code-view :assemb="assemb"></code-view>
+			</div>
+			<!-- code view -->
+
+			<div slot="right" calss="infoView">
+				<register-view></register-view>
+			</div>
+			<!-- info view -->
+		</Split>
+	</div>
+	<!-- main view -->
+</div>
 </template>
 
 <script>
 import header from "@/components/header.vue"
 import codeView from "@/components/codeView.vue"
 import registerView from "@/components/registerView.vue"
+import {uploadelf, start, getDisassemble} from '../api/api'
 
 export default {
 	name: 'home',
@@ -30,9 +40,36 @@ export default {
 		'register-view': registerView
 	},
 	data() {
-	return {
-		split: 0.6
-	}
+		return {
+			split: 0.6,
+			assemb: []
+		}
+	},
+	methods: {
+		click_uploadelf() {
+			uploadelf().then(resp => {
+				console.log('uploadelf --->', resp.data);
+			}).catch(error => {
+				console.log(error);
+			});
+		},
+		click_start() {
+			start().then(resp => {
+				console.log('start --->', resp.data);
+			}).catch(error => {
+				console.log(error);
+			});
+		},
+		click_getDisassemble() {
+			getDisassemble('main').then(resp => {
+				console.log('getDisassemble --->', resp.data);
+				this.assemb = resp.data.assemb;
+			}).catch(error => {
+				console.log(error);
+			});
+		}
+	},
+	beforeCreate() {
 	}
 }
 </script>

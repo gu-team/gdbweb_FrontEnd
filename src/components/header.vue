@@ -1,14 +1,14 @@
 <template>
 <div class="bg-light px-2 row h-100">
-    <Progress percent="45" status="active" class="col-7"/>
+    <Progress :percent="45" status="active" class="col-5"/>
     <ButtonGroup shape="circle" class="mt-1 col-2">
         <Button type="primary" icon="ios-skip-backward"></Button>
         <Button type="primary" icon="ios-skip-forward"></Button>
     </ButtonGroup>
-    <ButtonGroup shape="circle" class="mt-1 ml-1 col-2">
-        <Button icon="ios-color-wand-outline"></Button>
-        <Button icon="ios-sunny-outline"></Button>
-        <Button icon="ios-crop"></Button>
+    <ButtonGroup shape="circle" class="mt-1 ml-1 col">
+        <Button icon="ios-color-wand-outline" @click="uploadelf"></Button>
+        <Button icon="ios-sunny-outline" @click="start"></Button>
+        <Button icon="ios-crop" @click="getDisassemble"></Button>
         <Button icon="ios-color-filter-outline"></Button>
     </ButtonGroup>
 </div>
@@ -23,9 +23,13 @@
 
 <script>
 export default {
+    props: {
+        uploadelf: Function,
+        start: Function,
+        getDisassemble: Function
+    },
     data() {
-        return {
-            
+        return { 
         }
     }
 }

@@ -1,6 +1,6 @@
 <template>
 <div id="codeView">
-    <pre v-highlight><code class="armasm">{{showAsmCode()}}</code></pre>
+    <pre v-highlight><code class="armasm">{{ getAsmStr() }}</code></pre>
 </div>
 </template>
 
@@ -13,9 +13,12 @@ pre{
 <script>
 export default {
     name: "codeView",
+    props: {
+        assemb: Array
+    },
     data() {
         return {
-            assemb: [
+            defaultAssemb: [
                 "0x0000000000400da0 <+0>:     push   %rbx",
                 "0x0000000000400da1 <+1>:     cmp    $0x1,%edi",
                 "0x0000000000400da4 <+4>:     jne    0x400db6 <main+22>",
@@ -46,9 +49,12 @@ export default {
         }
     },
     methods: {
-        showAsmCode() {
+        getAsmStr() {
             var asmCode = "";
-            for (let i = 0; i < this.assemb.length; i++) {
+            var asmStrList = [];
+            console.log(this.assemb);
+            if (this.assemb == undefined || this.assemb.length == 0) asmStrList = this.defaultAssemb;
+            for (let i = 0; i < asmStrList.length; i++) {
                 asmCode += i;
                 if (i >= 100 && i < 1000) {
                     asmCode += " ";
@@ -57,7 +63,7 @@ export default {
                 } else {
                     asmCode += "   ";
                 }
-                asmCode += "|" + this.assemb[i] + "\r";
+                asmCode += "|" + asmStrList[i] + "\r";
             }
             console.log(asmCode);
             return asmCode;
