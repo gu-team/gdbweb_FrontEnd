@@ -2,10 +2,10 @@
 module.exports = {
     devServer: {
         host: 'localhost',
-        port: 8080,
+        port: 8000,
         proxy: {
             '/api': {
-                target: 'http://dev3.airdb.io:8080/',
+                target: 'http://dev3.airdb.io:8080',
                 changeOrigin: true,
                 ws: true
                 // 这样重写会把路径中 /api 消去
