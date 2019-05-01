@@ -63,7 +63,7 @@ export default {
 		click_getDisassemble() {
 			getDisassemble('main').then(resp => {
 				console.log('getDisassemble --->', resp.data);
-				this.assemb = resp.data.assemb;
+				this.assemb = resp.data.message;
 			}).catch(error => {
 				console.log(error);
 			});

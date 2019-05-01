@@ -1,25 +1,26 @@
 import axios from 'axios'
 
-axios.defaults.withCredentials = true
+// 携带cookie，怎么配置都无效，绝了
+// axios.defaults.withCredentials = true;
 
 export const uploadelf = () => {
     return axios.request({
         method: 'post',
-        url: 'http://dev3.airdb.io:8080/api/uploadelf'
+        url: '/api/uploadelf'
     })
 }
 
 export const start = () => {
     return axios.request({
         method: 'get',
-        url: 'http://dev3.airdb.io:8080/api/start'
+        url: '/api/start'
     })
 }
 
 export const setBreak = (type, message) => {
     return axios.request({
         method: 'post',
-        url: 'http://dev3.airdb.io:8080/api/break',
+        url: '/api/break',
         data: {
             type,
             message
@@ -30,23 +31,23 @@ export const setBreak = (type, message) => {
 export const gdbContinue = () => {
     return axios.request({
         method: 'get',
-        url: 'http://dev3.airdb.io:8080/api/continue'
+        url: '/api/continue'
     })
 }
 
 export const next = () => {
     return axios.request({
         method: 'get',
-        url: 'http://dev3.airdb.io:8080/api/next'
+        url: '/api/next'
     })
 }
 
-export const getDisassemble = (func_name = 'main') => {
+export const getDisassemble = (funName = 'main') => {
     return axios.request({
         method: 'post',
-        url: 'http://dev3.airdb.io:8080/api/disassemble',
+        url: '/api/disassemble',
         data: {
-            func_name
+            funName
         }
     })
 }
