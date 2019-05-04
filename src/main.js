@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-// highlight.js代码高亮指令
+// highlight.js代码高亮插件
 import Highlight from './utils/highlight';
 Vue.use(Highlight);
 

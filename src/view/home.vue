@@ -5,6 +5,10 @@
 		:uploadelf="click_uploadelf"
 		:start="click_start"
 		:getDisassemble="click_getDisassemble"
+		:next="click_next"
+		:uploadelf_loading="uploadelf_loading"
+		:start_loading="start_loading"
+		:next_loading="next_loading"
 		></head-er>
 	</div>
 	<!-- header -->
@@ -16,8 +20,8 @@
 			</div>
 			<!-- code view -->
 
-			<div slot="right" calss="infoView">
-				<register-view></register-view>
+			<div slot="right" class="infoView">
+				<info-view></info-view>
 			</div>
 			<!-- info view -->
 		</Split>
@@ -26,38 +30,54 @@
 </div>
 </template>
 
+<style>
+@import './home.css';
+</style>
+
 <script>
 import header from "@/components/header.vue"
 import codeView from "@/components/codeView.vue"
-import registerView from "@/components/registerView.vue"
-import {uploadelf, start, getDisassemble} from '../api/api'
+import infoView from "@/components/infoView.vue"
+import {uploadelf, start, getDisassemble, next} from '../api/api'
 
 export default {
 	name: 'home',
 	components: {
 		'code-view': codeView,
 		'head-er': header,
-		'register-view': registerView
+		'info-view': infoView
 	},
 	data() {
 		return {
 			split: 0.6,
-			assemb: []
+			assemb: [],
+			uploadelf_loading: false,
+			start_loading: false,
+			next_loading: false
 		}
 	},
 	methods: {
 		click_uploadelf() {
+			this.uploadelf_loading = true;
 			uploadelf().then(resp => {
 				console.log('uploadelf --->', resp.data);
+				this.uploadelf_loading = false;
 			}).catch(error => {
 				console.log(error);
+				this.error(error);
+				this.uploadelf_loading = false;
 			});
 		},
 		click_start() {
+			this.start_loading = true;
 			start().then(resp => {
 				console.log('start --->', resp.data);
+				this.click_getDisassemble();
+				this.start_loading = false;
 			}).catch(error => {
 				console.log(error);
+				this.error(error);
+				this.start_loading = false;
 			});
 		},
 		click_getDisassemble() {
@@ -66,49 +86,26 @@ export default {
 				this.assemb = resp.data.message;
 			}).catch(error => {
 				console.log(error);
+				this.error(error);
 			});
+		},
+		click_next() {
+			this.next_loading = true;
+			next().then(resp => {
+				console.log('next --->', resp.data);
+				this.click_getDisassemble();
+				this.next_loading = false;
+			}).catch(error => {
+				console.log(error);
+				this.error(error);
+				this.next_loading = false;
+			});
+		},
+		error (error) {
+			this.$Message.error(error);
 		}
 	},
 	beforeCreate() {
 	}
 }
 </script>
-
-<style>
-/* 宽度小于700px时*/
-@media (max-width: 700px) {
-}
-/* 宽度大于700px时*/
-@media (min-width: 700px) {
-    .homeView {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-	.header {
-		width: 100%;
-		height: 40px;
-		line-height: 40px;
-		overflow: hidden;
-	}
-	.mainView{
-		width: 100%;
-		height: 500px;
-		border: 1px solid #dcdee2;
-		background-color: antiquewhite;
-	}
-	.codeView{
-		height: 100%;
-		overflow-x: auto;
-		text-align: left;
-		font-size: 16px;
-	}
-	.infoView{
-		padding-left: 0.2rem;
-	}
-}
-
-</style>

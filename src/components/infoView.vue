@@ -1,13 +1,9 @@
 <template>
-<div id="registerView">
+<div id="infoView">
     <Collapse class="text-left" v-model="panelOpen">
         <Panel name="1">
             整数寄存器
             <Table slot="content" stripe :columns="columnsName" :data="registers" size="small"></Table>
-        </Panel>
-        <Panel name="2">
-            浮点数寄存器
-            <p slot="content"></p>
         </Panel>
         <Panel name="3">
             标志码
@@ -22,7 +18,7 @@
 
 <script>
 export default {
-    name: "codeViregisterViewew",
+    name: "infoViewew",
     data() {
         return {
             panelOpen: ['1','2','3'],
