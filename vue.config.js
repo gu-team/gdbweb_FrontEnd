@@ -7,7 +7,7 @@ module.exports = {
         proxy: {
             '/api': {
                 // 请求api的url地址，该url会被代理到 http://host:port
-                target: 'http://dev3.airdb.io:8080',
+                target: 'http://119.3.93.95:8080',
                 changeOrigin: true,
                 ws: true
                 // 这样重写会把路径中 /api 消去
