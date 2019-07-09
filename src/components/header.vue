@@ -1,15 +1,24 @@
 <template>
   <div class="header-wrapper">
-    <Input v-model="elfInfo" style="width:30%;margin-right:10px">
-      <span slot="prepend">
-        <Button type="primary" icon="md-cloud-upload" @click="click_uploadelf" :loading="uploadelf_loading">
-          uploadelf
-        </Button>
-      </span>
-    </Input>
+    <Upload action="//jsonplaceholder.typicode.com/posts/" style="display: flex;align-items: center;" :show-upload-list="false">
+      <Button type="primary" icon="md-cloud-upload" :loading="uploadelf_loading">
+        UPLOAD ELF
+      </Button>
+    </Upload>
+
+    <Input v-model="elf_info" disabled style="width:30%;margin-right:20px"></Input>
+
+    <!-- <Button icon="md-power" @click="click_start" :loading="start_loading" shape="circle" style="margin-right:20px">start</Button> -->
+
+    <!-- <ButtonGroup shape="circle" style="margin-right:20px">
+      <Button icon="md-remove-circle" @click="click_next" :loading="next_loading">break</Button>
+      <Button icon="md-fastforward" :loading="false">continue</Button>
+    </ButtonGroup> -->
 
     <ButtonGroup shape="circle">
       <Button icon="md-power" @click="click_start" :loading="start_loading">start</Button>
+      <Button icon="md-remove-circle" :loading="next_loading">break</Button>
+      <Button icon="md-fastforward" :loading="false">continue</Button>
       <Button icon="md-play" @click="click_next" :loading="next_loading">next</Button>
       <Button icon="md-skip-forward" :loading="false">step</Button>
     </ButtonGroup>
@@ -23,7 +32,7 @@
   z-index: 999;
   display: flex;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 20px;
 }
 </style>
 
@@ -39,7 +48,7 @@ export default {
   },
   data() {
     return {
-      elfInfo: 'please upload elf firstly',
+      elf_info: 'Please upload elf firstly',
       uploadelf_loading: false,
       start_loading: false,
       next_loading: false

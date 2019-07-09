@@ -3,6 +3,7 @@ import axios from 'axios'
 // 携带cookie，怎么配置都无效，绝了
 // axios.defaults.withCredentials = true;
 
+// 上传文件
 export const uploadelf = () => {
   return axios.request({
     method: 'post',
@@ -10,6 +11,7 @@ export const uploadelf = () => {
   })
 }
 
+// 开始
 export const start = () => {
   return axios.request({
     method: 'get',
@@ -17,17 +19,19 @@ export const start = () => {
   })
 }
 
-export const setBreak = (type, message) => {
+// 设置断点
+export const setBreak = (type, data) => {
   return axios.request({
     method: 'post',
     url: '/api/break',
     data: {
       type,
-      message
+      data
     }
   })
 }
 
+// 继续
 export const gdbContinue = () => {
   return axios.request({
     method: 'get',
@@ -35,6 +39,7 @@ export const gdbContinue = () => {
   })
 }
 
+// 下一步
 export const next = () => {
   return axios.request({
     method: 'get',
@@ -42,6 +47,7 @@ export const next = () => {
   })
 }
 
+// 获取汇编
 export const getDisassemble = (funName = 'main') => {
   return axios.request({
     method: 'post',

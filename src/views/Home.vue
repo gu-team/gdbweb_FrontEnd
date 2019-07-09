@@ -63,12 +63,12 @@ export default {
   }
   .header {
     width: 100%;
-    height: 7%;
+    height: 6%;
   }
   .main {
     width: 100%;
-    height: 92%;
-    margin: 1px 0 2px 0;
+    height: 94%;
+    border-top: 1px solid #ffffff;
     background-color: antiquewhite;
   }
   .code-view {
