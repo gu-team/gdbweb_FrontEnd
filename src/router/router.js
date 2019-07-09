@@ -1,15 +1,21 @@
-import VueRouter from 'vue-router'
 import Vue from 'vue'
+import Router from 'vue-router'
 
-// 在Vue中加载 VueRouter
-Vue.use(VueRouter)
+Vue.use(Router)
 
-import Home from '@/view/home'
-
-// 将该VueRouter实例导出
-export default new VueRouter({
-    // 该属性名为 routes 而非 routers，害苦我也
-    routes: [
-        { path: '/', name: 'Home', meta: {title: 'Home - 主页'}, component: Home }
-    ]
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'home',
+      meta: {title: 'Home - 主页'},
+      component: () => import('@/views/Home.vue')
+    },
+    {
+      path: '/about',
+      name: 'about',
+      meta: {title: 'About - 关于'},
+      component: () => import('@/views/About.vue')
+    }
+  ]
 })

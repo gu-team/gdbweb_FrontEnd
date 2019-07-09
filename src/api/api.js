@@ -4,50 +4,50 @@ import axios from 'axios'
 // axios.defaults.withCredentials = true;
 
 export const uploadelf = () => {
-    return axios.request({
-        method: 'post',
-        url: '/api/uploadelf'
-    })
+  return axios.request({
+    method: 'post',
+    url: '/api/uploadelf'
+  })
 }
 
 export const start = () => {
-    return axios.request({
-        method: 'get',
-        url: '/api/start'
-    })
+  return axios.request({
+    method: 'get',
+    url: '/api/start'
+  })
 }
 
 export const setBreak = (type, message) => {
-    return axios.request({
-        method: 'post',
-        url: '/api/break',
-        data: {
-            type,
-            message
-        }
-    })
+  return axios.request({
+    method: 'post',
+    url: '/api/break',
+    data: {
+      type,
+      message
+    }
+  })
 }
 
 export const gdbContinue = () => {
-    return axios.request({
-        method: 'get',
-        url: '/api/continue'
-    })
+  return axios.request({
+    method: 'get',
+    url: '/api/continue'
+  })
 }
 
 export const next = () => {
-    return axios.request({
-        method: 'get',
-        url: '/api/next'
-    })
+  return axios.request({
+    method: 'get',
+    url: '/api/next'
+  })
 }
 
 export const getDisassemble = (funName = 'main') => {
-    return axios.request({
-        method: 'post',
-        url: '/api/disassemble',
-        data: {
-            funName
-        }
-    })
+  return axios.request({
+    method: 'post',
+    url: '/api/disassemble',
+    data: {
+      funName
+    }
+  })
 }
