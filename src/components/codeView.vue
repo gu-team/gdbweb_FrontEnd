@@ -1,11 +1,16 @@
 <template>
-<div id="codeView" v-highlight>
-  <pre><code v-html="getAsmStr()"></code></pre>
-</div>
+  <div id="codeView" v-highlight>
+    <pre><code v-html="getAsmStr()"></code></pre>
+  </div>
 </template>
 
 <style>
-pre{
+#codeView {
+  height: 100%;
+  overflow: auto;
+  text-align: left;
+}
+pre {
   margin-top: 0;
 }
 </style>

@@ -1,9 +1,17 @@
 <template>
   <div class="header-wrapper">
+    <Input v-model="elfInfo" style="width:30%;margin-right:10px">
+      <span slot="prepend">
+        <Button type="primary" icon="md-cloud-upload" @click="click_uploadelf" :loading="uploadelf_loading">
+          uploadelf
+        </Button>
+      </span>
+    </Input>
+
     <ButtonGroup shape="circle">
-      <Button icon="md-cloud-upload" @click="click_uploadelf" :loading="uploadelf_loading">uploadelf</Button>
-      <Button icon="md-arrow-dropright-circle" @click="click_start" :loading="start_loading">start</Button>
-      <Button icon="ios-skip-forward" @click="click_next" :loading="next_loading">next</Button>
+      <Button icon="md-power" @click="click_start" :loading="start_loading">start</Button>
+      <Button icon="md-play" @click="click_next" :loading="next_loading">next</Button>
+      <Button icon="md-skip-forward" :loading="false">step</Button>
     </ButtonGroup>
   </div>
 </template>
@@ -11,7 +19,7 @@
 <style>
 .header-wrapper {
   height: 100%;
-  background-color: white;
+  background-color: #DCDFE6;
   z-index: 999;
   display: flex;
   align-items: center;
@@ -31,6 +39,7 @@ export default {
   },
   data() {
     return {
+      elfInfo: 'please upload elf firstly',
       uploadelf_loading: false,
       start_loading: false,
       next_loading: false

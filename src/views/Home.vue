@@ -20,10 +20,6 @@
   </div>
 </template>
 
-<style>
-@import './home.css';
-</style>
-
 <script>
 import headEr from '@/components/header'
 import codeView from "@/components/codeView.vue"
@@ -56,3 +52,36 @@ export default {
   }
 }
 </script>
+
+<style>
+/* 宽度大于700px时*/
+@media (min-width: 760px) {
+  .wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  .header {
+    width: 100%;
+    height: 7%;
+  }
+  .main {
+    width: 100%;
+    height: 92%;
+    margin: 1px 0 2px 0;
+    background-color: antiquewhite;
+  }
+  .code-view {
+    height: 100%;
+    font-size: 16px;
+  }
+  .info-view {
+    padding-left: 0.2rem;
+    overflow: auto;
+  }
+}
+
+/* 宽度小于700px时*/
+@media (max-width: 760px) {
+}
+</style>
