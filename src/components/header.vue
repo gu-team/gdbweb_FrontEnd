@@ -1,6 +1,10 @@
 <template>
   <div class="header-wrapper">
-    <Upload action="//jsonplaceholder.typicode.com/posts/" style="display: flex;align-items: center;" :show-upload-list="false">
+    <Upload action="//jsonplaceholder.typicode.com/posts/" style="display: flex;align-items: center;"
+    :show-upload-list="false"
+    :on-progress="upload_progress"
+    :on-success="upload_success"
+    :on-error="upload_error">
       <Button type="primary" icon="md-cloud-upload" :loading="uploadelf_loading">
         UPLOAD ELF
       </Button>
@@ -17,7 +21,7 @@
 
     <ButtonGroup shape="circle">
       <Button icon="md-power" @click="click_start" :loading="start_loading">start</Button>
-      <Button icon="md-remove-circle" :loading="next_loading">break</Button>
+      <Button icon="md-remove-circle" :loading="false">break</Button>
       <Button icon="md-fastforward" :loading="false">continue</Button>
       <Button icon="md-play" @click="click_next" :loading="next_loading">next</Button>
       <Button icon="md-skip-forward" :loading="false">step</Button>
@@ -37,7 +41,7 @@
 </style>
 
 <script>
-import { uploadelf, start, next } from '@/api/api.js'
+import { start, next } from '@/api/api.js'
 
 export default {
   props: {
@@ -55,43 +59,32 @@ export default {
     }
   },
   methods: {
-    click_uploadelf() {
-      this.uploadelf_loading = true;
-      uploadelf().then(resp => {
-        console.log('uploadelf --->', resp.data);
-        this.uploadelf_loading = false;
+    api_handle(api, loading, succ_msg, err_msg) {
+      loading = true;
+      api().then(resp => {
+        console.log(resp.data);
+        this.setDisassemble();
+        this.$Message.success(succ_msg);
+        loading = false;
       }).catch(error => {
         console.log(error);
-        this.error(error);
-        this.uploadelf_loading = false;
+        this.$Message.error(err_msg);
+        loading = false;
       });
     },
     click_start() {
-      this.start_loading = true;
-      start().then(resp => {
-        console.log('start --->', resp.data);
-        this.setDisassemble();
-        this.start_loading = false;
-      }).catch(error => {
-        console.log(error);
-        this.error(error);
-        this.start_loading = false;
-      });
+      console.log('=============click_start=============');
+      this.api_handle(start, this.start_loading, 'start!', 'start fail!');
     },
     click_next() {
-      this.next_loading = true;
-      next().then(resp => {
-        console.log('next --->', resp.data);
-        this.setDisassemble();
-        this.next_loading = false;
-      }).catch(error => {
-        console.log(error);
-        this.error(error);
-        this.next_loading = false;
-      });
+      console.log('=============click_next=============');
+      this.api_handle(next, this.next_loading, 'next 1!', 'next fail!');
     },
-    error (error) {
-      this.$Message.error(error);
+    upload_progress() {
+    },
+    upload_success() {
+    },
+    upload_error() {
     }
   }
 }

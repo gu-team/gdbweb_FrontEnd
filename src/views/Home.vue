@@ -7,7 +7,9 @@
     <div class="main">
       <Split v-model="split">
         <div slot="left" class="code-view">
-          <code-view :assemb="assemb"></code-view>
+          <code-view 
+          :assemb="assemb">
+          </code-view>
         </div>
         <!-- code view -->
 
