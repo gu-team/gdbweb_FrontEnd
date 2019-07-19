@@ -1,11 +1,12 @@
 <template>
   <div class="header-wrapper">
     <Upload action="//jsonplaceholder.typicode.com/posts/" style="display: flex;align-items: center;"
+    :before-upload="handleUpload"
     :show-upload-list="false"
     :on-progress="upload_progress"
     :on-success="upload_success"
     :on-error="upload_error">
-      <Button type="primary" icon="md-cloud-upload" :loading="uploadelf_loading">
+      <Button type="primary" icon="md-cloud-upload" :loading="uploadelf_loading" @click="upload">
         UPLOAD ELF
       </Button>
     </Upload>
@@ -20,11 +21,11 @@
     </ButtonGroup> -->
 
     <ButtonGroup shape="circle">
-      <Button icon="md-power" @click="click_start" :loading="start_loading">start</Button>
-      <Button icon="md-remove-circle" :loading="false">break</Button>
-      <Button icon="md-fastforward" :loading="false">continue</Button>
-      <Button icon="md-play" @click="click_next" :loading="next_loading">next</Button>
-      <Button icon="md-skip-forward" :loading="false">step</Button>
+      <Button icon="md-power" @click="click_start" :loading="start_loading" :disabled="buttonsDisabled">start</Button>
+      <Button icon="md-remove-circle" :loading="false" :disabled="buttonsDisabled">break</Button>
+      <Button icon="md-fastforward" :loading="false" :disabled="buttonsDisabled">continue</Button>
+      <Button icon="md-play" @click="click_next" :loading="next_loading" :disabled="buttonsDisabled">next</Button>
+      <Button icon="md-skip-forward" :loading="false" :disabled="buttonsDisabled">step</Button>
     </ButtonGroup>
   </div>
 </template>
@@ -41,7 +42,9 @@
 </style>
 
 <script>
-import { start, next } from '@/api/api.js'
+// import { start, next } from '@/api/api.js'
+import { next } from '@/api/api.js'
+import { mapState } from 'vuex'
 
 export default {
   props: {
@@ -57,6 +60,13 @@ export default {
       start_loading: false,
       next_loading: false
     }
+  },
+  computed: {
+    ...mapState([
+      'buttonsDisabled',
+      'currentPid'
+    ])
+    // sss(){ return !this.$store.state.buttons.start }
   },
   methods: {
     api_handle(api, loading, succ_msg, err_msg) {
@@ -74,17 +84,27 @@ export default {
     },
     click_start() {
       console.log('=============click_start=============');
-      this.api_handle(start, this.start_loading, 'start!', 'start fail!');
+      // this.api_handle(start, this.start_loading, 'start!', 'start fail!');
+      this.$parent.sendCommand(this.currentPid, 'start')
     },
     click_next() {
       console.log('=============click_next=============');
-      this.api_handle(next, this.next_loading, 'next 1!', 'next fail!');
+      // this.api_handle(next, this.next_loading, 'next 1!', 'next fail!');
+      this.$parent.sendCommand(this.currentPid, 'next')
     },
     upload_progress() {
     },
     upload_success() {
     },
     upload_error() {
+    },
+    handleUpload(){
+      return false
+    },
+    upload(){
+      console.log('upload elf and excute gdb file')
+      this.$parent.sendCommand(0, 'uploadelf')
+      // this.$parent.uploadElf()
     }
   }
 }

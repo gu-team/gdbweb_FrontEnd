@@ -35,6 +35,11 @@ export default {
     codeView,
     infoView
   },
+  created(){
+    window.vue = this
+    // create websocket when page created
+    this.initWebSocket()
+  },
   data() {
     return {
       assemb: [],
@@ -50,6 +55,48 @@ export default {
         console.log(error);
         this.error(error);
       });
+    },
+    initWebSocket(){
+      // generate random client id
+      this.client_id = Math.random().toString(36).slice(-8)
+      // connect to backend via websocket
+      this.ws = new WebSocket(`ws://192.168.2.120:8000/ws/gdb/${this.client_id}`)
+      this.ws.onopen = this.websocketOpen
+      this.ws.onclose = this.websocketClose
+      this.ws.onerror = this.websocketError
+      this.ws.onmessage = this.websocketOnMessage
+    },
+    // call on websocket connected
+    websocketOpen(){
+      console.log('websocket connected')
+    },
+    // call on websocket disconnected
+    websocketClose(msg){
+      console.log('websocket disconnected', msg)
+    },
+    // call on websocket error
+    websocketError(e){
+      console.log('websocket error', e)
+    },
+    // call on receive message
+    websocketOnMessage(msg){
+      let res = JSON.parse(msg.data)
+      console.log(res)
+      if (!res.hasOwnProperty('pid')) {
+        res.pid = -1
+      }
+      this.$store.commit('updateGdb', res)
+      this.$store.commit('setCurrentPid', res.pid)
+      if (res.pid != -1){
+        this.$store.commit('enableButtons')
+      }
+    },
+    sendCommand(pid, cmd) {
+      console.log(pid, cmd)
+      this.ws.send(JSON.stringify({
+        'pid': pid,
+        'command_line': cmd
+      }))
     }
   }
 }
