@@ -3,7 +3,7 @@
   <Collapse v-model="panelOpen">
     <Panel name="registers">
       Registers
-      <Table slot="content" stripe :columns="columnsName" :data="registers" size="small"></Table>
+      <register-list slot="content"/>
     </Panel>
     <Panel name="breakpoints">
       Breakpoints
@@ -19,53 +19,16 @@
 </template>
 
 <script>
+import registerList from '@/components/registerList.vue'
+
 export default {
   name: "infoViewew",
+  components: {
+    registerList
+  },
   data() {
     return {
-      panelOpen: ['registers', 'breakpoints', 'memory', 'syscall'],
-      registers: [
-        {
-          name: "rip",
-          Hex: "0x0",
-          Dec: 0
-        },
-        {
-          name: "rax",
-          Hex: "0x0",
-          Dec: 0
-        },
-        {
-          name: "rbx",
-          Hex: "0x0",
-          Dec: 0
-        },
-        {
-          name: "rsp",
-          Hex: "0x0",
-          Dec: 0
-        },
-        {
-          name: "rbp",
-          Hex: "0x0",
-          Dec: 0
-        }
-      ],
-      columnsName: [
-        {
-          title: 'Name',
-          key: 'name',
-          width: 70
-        },
-        {
-          title: 'Hex',
-          key: 'Hex'
-        },
-        {
-          title: 'Dec',
-          key: 'Dec'
-        }
-      ]
+      panelOpen: []
     }
   },
   methods: {

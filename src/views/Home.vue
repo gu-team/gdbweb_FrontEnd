@@ -34,6 +34,11 @@ export default {
     infoView
   },
   created() {
+    // 配置消息提示
+    this.$Message.config({
+      top: 50,
+      duration: 3
+    })
     // create websocket when page created
     wsManager.initWebSocket(this)
   },
@@ -68,8 +73,10 @@ export default {
   .code-view {
     height: 100%;
     font-size: 16px;
+    overflow: auto;
   }
   .info-view {
+    height: 100%;
     padding-left: 0.2rem;
     overflow: auto;
   }

@@ -22,10 +22,11 @@
 
     <ButtonGroup shape="circle">
       <Button icon="md-power" @click="click_start" :loading="loading" :disabled="buttonsDisabled">start</Button>
-      <Button icon="md-remove-circle" :loading="loading" :disabled="buttonsDisabled">break</Button>
-      <Button icon="md-fastforward" :loading="loading" :disabled="buttonsDisabled">continue</Button>
-      <Button icon="md-play" @click="click_next" :loading="loading" :disabled="buttonsDisabled">next</Button>
-      <Button icon="md-skip-forward" :loading="loading" :disabled="buttonsDisabled">step</Button>
+      <!-- <Button icon="md-play" @click="click_run" :loading="loading" :disabled="buttonsDisabled">run</Button> -->
+      <Button icon="md-remove-circle" @click="click_break" :loading="loading" :disabled="buttonsDisabled">break</Button>
+      <Button icon="md-fastforward" @click="click_continue" :loading="loading" :disabled="buttonsDisabled">continue</Button>
+      <Button icon="md-arrow-round-forward" @click="click_next" :loading="loading" :disabled="buttonsDisabled">next</Button>
+      <Button icon="md-redo" @click="click_step" :loading="loading" :disabled="buttonsDisabled">step</Button>
     </ButtonGroup>
   </div>
 </template>
@@ -61,28 +62,52 @@ export default {
     ])
   },
   methods: {
-    click_start() {
-      console.log('click_start');
-      wsManager.sendCommand(this.currentPid, 'start')
-      wsManager.sendCommand(this.currentPid, 'disassemble', 'assmb')
-    },
-    click_next() {
-      console.log('click_next');
-      wsManager.sendCommand(this.currentPid, 'next')
-      wsManager.sendCommand(this.currentPid, 'disassemble', 'assmb')
-    },
     upload_progress() {
     },
     upload_success() {
     },
     upload_error() {
     },
-    handleUpload(){
+    handleUpload() {
       return false
     },
-    upload(){
-      console.log('upload elf and excute gdb file')
+    upload() {
+      console.log('upload()')
       wsManager.sendCommand(0, 'uploadelf')
+    },
+    // 发送命令，获取相关信息
+    getInfo() {
+      wsManager.sendCommand(this.currentPid, 'disassemble', 'assmb')
+      wsManager.sendCommand(this.currentPid, 'info registers', 'register')
+    },
+    click_start() {
+      console.log('click_start()')
+      wsManager.sendCommand(this.currentPid, 'start')
+      this.getInfo()
+    },
+    click_run() {
+      console.log('click_run()')
+      wsManager.sendCommand(this.currentPid, 'run')
+      this.getInfo()
+    },
+    click_break() {
+      console.log('click_break()')
+      wsManager.sendCommand(this.currentPid, 'break main')
+    },
+    click_next() {
+      console.log('click_next()')
+      wsManager.sendCommand(this.currentPid, 'next')
+      this.getInfo()
+    },
+    click_continue() {
+      console.log('click_continue()')
+      wsManager.sendCommand(this.currentPid, 'continue')
+      this.getInfo()
+    },
+    click_step() {
+      console.log('click_step()')
+      wsManager.sendCommand(this.currentPid, 'step')
+      this.getInfo()
     }
   }
 }

@@ -6,8 +6,6 @@
 
 <style>
 #codeView {
-  height: 100%;
-  overflow: auto;
   text-align: left;
 }
 pre {
@@ -32,8 +30,7 @@ export default {
   },
   computed: {
     ...mapState([
-      'assmb_data',
-      'currentPid',
+      'assmb_data'
     ]),
     asmStr() {
       let asmStr = ""

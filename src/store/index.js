@@ -6,6 +6,7 @@ Vue.use(Vuex)
 const state = {
   currentPid: -1,
   assmb_data: [], // 汇编代码
+  register_data: [], // 寄存器值
   buttonsDisabled: true,
   loading: false
 }
@@ -20,9 +21,12 @@ const mutations = {
         // state.assmb_data[data.pid] = data.data
         // console.log(state.assmb_data[data.pid])
         state.assmb_data = data.data
-        break;
+        break
+      case 'register':
+        state.register_data = data.data
+        break
       default:
-        break;
+        break
     }
   },
   setCurrentPid(state, pid) {
