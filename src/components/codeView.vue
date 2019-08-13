@@ -1,6 +1,6 @@
 <template>
   <div id="codeView" v-highlight>
-    <pre><code v-html="getAsmStr()"></code></pre>
+    <pre><code v-html="asmStr"></code></pre>
   </div>
 </template>
 
@@ -16,11 +16,10 @@ pre {
 </style>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: "codeView",
-  props: {
-    assemb: Array
-  },
   data() {
     return {
       defaultAssemb: [
@@ -31,26 +30,29 @@ export default {
       ]
     }
   },
-  methods: {
-    getAsmStr() {
-      let asmStr = "";
-      let asmStrList = [];
-      console.log(this.assemb);
-      // 如果父组件传进来的assmb是undefined，或者为空数组，那么asmStrList设为默认
-      if (this.assemb == undefined || this.assemb.length == 0)
-        asmStrList = this.defaultAssemb;
-      else
-        asmStrList = this.assemb;
-      console.log('asmStrList --->', asmStrList);
+  computed: {
+    ...mapState([
+      'assmb_data',
+      'currentPid',
+    ]),
+    asmStr() {
+      let asmStr = ""
+      let asmStrList = this.assmb_data
+      // console.log('asmStrList --->', asmStrList)
+      // 如果获取到的assmb是undefined，或者为空数组，那么asmStrList设为默认
+      if (asmStrList == undefined || asmStrList.length == 0)
+        asmStrList = this.defaultAssemb
       // 将汇编字符串数组拼接成汇编字符串
       for (let i = 0; i < asmStrList.length; i++) {
-        asmStrList[i] = asmStrList[i].replace(/\\t/g, "\t");
-        asmStrList[i] = asmStrList[i].replace(/\\n/g, "\n");
-        asmStr += asmStrList[i];
+        asmStrList[i] = asmStrList[i].replace(/\\t/g, "\t")
+        asmStrList[i] = asmStrList[i].replace(/\\n/g, "\n")
+        asmStr += asmStrList[i]
       }
-      console.log('asmStr --->', asmStr);
-      return asmStr;
+      // console.log('asmStr --->', asmStr)
+      return asmStr
     }
+  },
+  methods: {
   }
 }
 </script>

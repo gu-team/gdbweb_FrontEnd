@@ -3,29 +3,44 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-const gdbState = {
+const state = {
   currentPid: -1,
-  // key is pid
-  gdbs: {},
-  buttonsDisabled: true
+  assmb_data: [], // 汇编代码
+  buttonsDisabled: true,
+  loading: false
 }
 
+// Vuex的compute属性
 const getters = {}
 
 const mutations = {
-  updateGdb(state, payload) {
-    state['gdbs'][payload.pid] = payload
+  updateData(state, data) {
+    switch (data.data_flag) {
+      case 'assmb':
+        // state.assmb_data[data.pid] = data.data
+        // console.log(state.assmb_data[data.pid])
+        state.assmb_data = data.data
+        break;
+      default:
+        break;
+    }
   },
   setCurrentPid(state, pid) {
-    state['currentPid'] = pid
+    state.currentPid = pid
   },
   enableButtons(state) {
-    state['buttonsDisabled'] = false
+    state.buttonsDisabled = false
+  },
+  disableButtons(state) {
+    state.buttonsDisabled = true
+  },
+  setLoading(state, bool) {
+    state.loading = bool
   }
 }
 
 export default new Vuex.Store({
-  state: gdbState,
+  state: state,
   mutations: mutations,
   getters: getters
 })

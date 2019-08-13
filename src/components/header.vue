@@ -6,7 +6,7 @@
     :on-progress="upload_progress"
     :on-success="upload_success"
     :on-error="upload_error">
-      <Button type="primary" icon="md-cloud-upload" :loading="uploadelf_loading" @click="upload">
+      <Button type="primary" icon="md-cloud-upload" :loading="loading" @click="upload">
         UPLOAD ELF
       </Button>
     </Upload>
@@ -21,11 +21,11 @@
     </ButtonGroup> -->
 
     <ButtonGroup shape="circle">
-      <Button icon="md-power" @click="click_start" :loading="start_loading" :disabled="buttonsDisabled">start</Button>
-      <Button icon="md-remove-circle" :loading="false" :disabled="buttonsDisabled">break</Button>
-      <Button icon="md-fastforward" :loading="false" :disabled="buttonsDisabled">continue</Button>
-      <Button icon="md-play" @click="click_next" :loading="next_loading" :disabled="buttonsDisabled">next</Button>
-      <Button icon="md-skip-forward" :loading="false" :disabled="buttonsDisabled">step</Button>
+      <Button icon="md-power" @click="click_start" :loading="loading" :disabled="buttonsDisabled">start</Button>
+      <Button icon="md-remove-circle" :loading="loading" :disabled="buttonsDisabled">break</Button>
+      <Button icon="md-fastforward" :loading="loading" :disabled="buttonsDisabled">continue</Button>
+      <Button icon="md-play" @click="click_next" :loading="loading" :disabled="buttonsDisabled">next</Button>
+      <Button icon="md-skip-forward" :loading="loading" :disabled="buttonsDisabled">step</Button>
     </ButtonGroup>
   </div>
 </template>
@@ -43,54 +43,33 @@
 
 <script>
 // import { start, next } from '@/api/api.js'
-import { next } from '@/api/api.js'
+// import { next } from '@/api/api.js'
 import { mapState } from 'vuex'
+import wsManager from '@/api/webSocket.js'
 
 export default {
-  props: {
-    setDisassemble: {
-      type: Function,
-      required: true
-    }
-  },
   data() {
     return {
-      elf_info: 'Please upload elf firstly',
-      uploadelf_loading: false,
-      start_loading: false,
-      next_loading: false
+      elf_info: 'Please upload elf firstly'
     }
   },
   computed: {
     ...mapState([
       'buttonsDisabled',
-      'currentPid'
+      'currentPid',
+      'loading'
     ])
-    // sss(){ return !this.$store.state.buttons.start }
   },
   methods: {
-    api_handle(api, loading, succ_msg, err_msg) {
-      loading = true;
-      api().then(resp => {
-        console.log(resp.data);
-        this.setDisassemble();
-        this.$Message.success(succ_msg);
-        loading = false;
-      }).catch(error => {
-        console.log(error);
-        this.$Message.error(err_msg);
-        loading = false;
-      });
-    },
     click_start() {
-      console.log('=============click_start=============');
-      // this.api_handle(start, this.start_loading, 'start!', 'start fail!');
-      this.$parent.sendCommand(this.currentPid, 'start')
+      console.log('click_start');
+      wsManager.sendCommand(this.currentPid, 'start')
+      wsManager.sendCommand(this.currentPid, 'disassemble', 'assmb')
     },
     click_next() {
-      console.log('=============click_next=============');
-      // this.api_handle(next, this.next_loading, 'next 1!', 'next fail!');
-      this.$parent.sendCommand(this.currentPid, 'next')
+      console.log('click_next');
+      wsManager.sendCommand(this.currentPid, 'next')
+      wsManager.sendCommand(this.currentPid, 'disassemble', 'assmb')
     },
     upload_progress() {
     },
@@ -103,8 +82,7 @@ export default {
     },
     upload(){
       console.log('upload elf and excute gdb file')
-      this.$parent.sendCommand(0, 'uploadelf')
-      // this.$parent.uploadElf()
+      wsManager.sendCommand(0, 'uploadelf')
     }
   }
 }

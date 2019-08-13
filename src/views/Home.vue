@@ -1,15 +1,13 @@
 <template>
   <div class="wrapper">
     <div class="header">
-      <head-er :setDisassemble='setDisassemble'/>
+      <head-er/>
     </div>
 
     <div class="main">
       <Split v-model="split">
         <div slot="left" class="code-view">
-          <code-view 
-          :assemb="assemb">
-          </code-view>
+          <code-view/>
         </div>
         <!-- code view -->
 
@@ -26,7 +24,7 @@
 import headEr from '@/components/header'
 import codeView from "@/components/codeView.vue"
 import infoView from "@/components/infoView.vue"
-import { getDisassemble } from '@/api/api.js'
+import wsManager from '@/api/webSocket.js'
 
 export default {
   name: 'home',
@@ -35,69 +33,16 @@ export default {
     codeView,
     infoView
   },
-  created(){
-    window.vue = this
+  created() {
     // create websocket when page created
-    this.initWebSocket()
+    wsManager.initWebSocket(this)
   },
   data() {
     return {
-      assemb: [],
       split: 0.6
     }
   },
   methods: {
-    setDisassemble() {
-      getDisassemble('main').then(resp => {
-        console.log('getDisassemble --->', resp.data);
-        this.assemb = resp.data.message;
-      }).catch(error => {
-        console.log(error);
-        this.error(error);
-      });
-    },
-    initWebSocket(){
-      // generate random client id
-      this.client_id = Math.random().toString(36).slice(-8)
-      // connect to backend via websocket
-      this.ws = new WebSocket(`ws://192.168.2.120:8000/ws/gdb/${this.client_id}`)
-      this.ws.onopen = this.websocketOpen
-      this.ws.onclose = this.websocketClose
-      this.ws.onerror = this.websocketError
-      this.ws.onmessage = this.websocketOnMessage
-    },
-    // call on websocket connected
-    websocketOpen(){
-      console.log('websocket connected')
-    },
-    // call on websocket disconnected
-    websocketClose(msg){
-      console.log('websocket disconnected', msg)
-    },
-    // call on websocket error
-    websocketError(e){
-      console.log('websocket error', e)
-    },
-    // call on receive message
-    websocketOnMessage(msg){
-      let res = JSON.parse(msg.data)
-      console.log(res)
-      if (!res.hasOwnProperty('pid')) {
-        res.pid = -1
-      }
-      this.$store.commit('updateGdb', res)
-      this.$store.commit('setCurrentPid', res.pid)
-      if (res.pid != -1){
-        this.$store.commit('enableButtons')
-      }
-    },
-    sendCommand(pid, cmd) {
-      console.log(pid, cmd)
-      this.ws.send(JSON.stringify({
-        'pid': pid,
-        'command_line': cmd
-      }))
-    }
   }
 }
 </script>

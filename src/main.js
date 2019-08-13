@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
+
+/* Vuex */
 import store from './store'
 
 /* highlight 代码高亮插件 */
