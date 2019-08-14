@@ -23,7 +23,7 @@
     :data="breakpoints">
   </Table>
   <div style="display:flex;justify-content:flex-end;padding-right:20px">
-    <Button @click="deleteBreakpoints()" type="success">删除已选断点</Button>
+    <Button @click="deleteBreakpoints()" type="success" :disabled="buttonsDisabled">删除已选断点</Button>
   </div>
 </div>
 </template>
