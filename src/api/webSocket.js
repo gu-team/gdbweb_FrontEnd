@@ -31,19 +31,19 @@ export default {
   // call on websocket disconnected
   websocketClose(msg) {
     console.log('websocket disconnected', msg)
-    Vue.$store.commit('setLoading', true)
+    Vue.$store.commit('setLoading', false)
   },
   // call on websocket error
   websocketError(e) {
     console.log('websocket error', e)
-    Vue.$store.commit('setLoading', true)
+    Vue.$store.commit('setLoading', false)
   },
   // call on receive message
   websocketOnMessage(msg) {
     let res = JSON.parse(msg.data)
     console.log(res)
     if (res.pid == undefined || res.pid == -1) {
-      Vue.$Message.error('Please upload elf firstly')
+      Vue.$Message.warning('Please upload elf firstly')
       Vue.$store.commit('disableButtons')
     } else if (res.status_code != STATUS_CODE.SUCCESS) {
       Vue.$Message.error(res.msg)

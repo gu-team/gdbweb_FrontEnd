@@ -1,6 +1,7 @@
 <template>
   <Table
     stripe
+    border
     :columns="columnsName"
     :data="registers">
   </Table>
@@ -14,13 +15,17 @@ export default {
     return {
       columnsName: [{
         title: 'Name',
-        key: 'name'
+        key: 'name',
+        align: 'center',
+        minWidth: 70
       }, {
         title: 'Hex',
-        key: 'Hex'
+        key: 'Hex',
+        minWidth: 100
       }, {
         title: 'Dec',
-        key: 'Dec'
+        key: 'Dec',
+        minWidth: 100
       }]
     }
   },
@@ -71,13 +76,14 @@ export default {
   },
   methods: {
     addRegister(registers, name, hex_num, dec_num) {
-      if (name == 'rip') {
+      name = name.toUpperCase()
+      if (name == 'RIP') {
         registers.unshift({
           name,
           Hex: hex_num,
           Dec: dec_num
         })
-      } else if (name[0] == 'k') {
+      } else if (name[0] == 'K') {
         return
       } else{
         registers.push({

@@ -1,33 +1,70 @@
 <template>
   <div class="header-wrapper">
-    <Upload action="//jsonplaceholder.typicode.com/posts/" style="display: flex;align-items: center;"
-    :before-upload="handleUpload"
-    :show-upload-list="false"
-    :on-progress="upload_progress"
-    :on-success="upload_success"
-    :on-error="upload_error">
+    <Upload action="//jsonplaceholder.typicode.com/posts/"
+      style="display:flex;align-items:center;margin-right:20px"
+      :before-upload="handleUpload"
+      :show-upload-list="false"
+      :on-progress="upload_progress"
+      :on-success="upload_success"
+      :on-error="upload_error">
       <Button type="primary" icon="md-cloud-upload" :loading="loading" @click="upload">
         UPLOAD ELF
       </Button>
     </Upload>
 
-    <Input v-model="elf_info" disabled style="width:30%;margin-right:20px"></Input>
+    <!-- <Input v-model="elf_info" disabled style="width:30%;margin-right:20px"></Input> -->
 
-    <!-- <Button icon="md-power" @click="click_start" :loading="start_loading" shape="circle" style="margin-right:20px">start</Button> -->
+    <ButtonGroup shape="circle" style="margin-right:10px">
+      <Button icon="md-power" @click="click_start" :loading="loading" :disabled="buttonsDisabled">
+        <Tooltip content="运行程序，并在main函数入口处停止">
+          start
+        </Tooltip>
+      </Button>
 
-    <!-- <ButtonGroup shape="circle" style="margin-right:20px">
-      <Button icon="md-remove-circle" @click="click_next" :loading="next_loading">break</Button>
-      <Button icon="md-fastforward" :loading="false">continue</Button>
-    </ButtonGroup> -->
+      <Button icon="md-play" @click="click_run" :loading="loading" :disabled="buttonsDisabled">
+        <Tooltip content="运行程序">
+          run
+        </Tooltip>
+      </Button>
 
-    <ButtonGroup shape="circle">
-      <Button icon="md-power" @click="click_start" :loading="loading" :disabled="buttonsDisabled">start</Button>
-      <!-- <Button icon="md-play" @click="click_run" :loading="loading" :disabled="buttonsDisabled">run</Button> -->
-      <Button icon="md-remove-circle" @click="click_break" :loading="loading" :disabled="buttonsDisabled">break</Button>
-      <Button icon="md-fastforward" @click="click_continue" :loading="loading" :disabled="buttonsDisabled">continue</Button>
-      <Button icon="md-arrow-round-forward" @click="click_next" :loading="loading" :disabled="buttonsDisabled">next</Button>
-      <Button icon="md-redo" @click="click_step" :loading="loading" :disabled="buttonsDisabled">step</Button>
+      <Button icon="md-fastforward" @click="click_continue" :loading="loading" :disabled="buttonsDisabled">
+        <Tooltip content="执行到下一个断点处">
+          continue
+        </Tooltip>
+      </Button>
     </ButtonGroup>
+
+    <ButtonGroup shape="circle" style="margin-right:10px">
+      <Button icon="md-arrow-round-forward" @click="click_next" :loading="loading" :disabled="buttonsDisabled">
+        <Tooltip content="源代码执行下一步">
+          next
+        </Tooltip>
+      </Button>
+
+      <Button icon="md-redo" @click="click_step" :loading="loading" :disabled="buttonsDisabled">
+        <Tooltip content="源代码执行下一步，并进入函数">
+          step
+        </Tooltip>
+      </Button>
+
+      <Button icon="md-arrow-round-forward" @click="click_nexti" :loading="loading" :disabled="buttonsDisabled">
+        <Tooltip content="汇编代码执行下一步">
+          nexti
+        </Tooltip>
+      </Button>
+
+      <Button icon="md-redo" @click="click_stepi" :loading="loading" :disabled="buttonsDisabled">
+        <Tooltip content="源代码执行下一步，并进入函数">
+          stepi
+        </Tooltip>
+      </Button>
+    </ButtonGroup>
+
+    <Tooltip content="ELF文件信息">
+      <Button icon="md-alert" type="info" :loading="loading" :disabled="buttonsDisabled">
+        ELF INFO
+      </Button>
+    </Tooltip>
   </div>
 </template>
 
@@ -38,19 +75,20 @@
   z-index: 999;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 20px;
 }
 </style>
 
 <script>
-// import { start, next } from '@/api/api.js'
-// import { next } from '@/api/api.js'
 import { mapState } from 'vuex'
 import wsManager from '@/api/webSocket.js'
 
 export default {
   data() {
     return {
+      select: '',
+      value: '',
       elf_info: 'Please upload elf firstly'
     }
   },
@@ -79,6 +117,7 @@ export default {
     getInfo() {
       wsManager.sendCommand(this.currentPid, 'disassemble', 'assmb')
       wsManager.sendCommand(this.currentPid, 'info registers', 'register')
+      // wsManager.sendCommand(this.currentPid, 'info breakpoints')
     },
     click_start() {
       console.log('click_start()')
@@ -89,10 +128,6 @@ export default {
       console.log('click_run()')
       wsManager.sendCommand(this.currentPid, 'run')
       this.getInfo()
-    },
-    click_break() {
-      console.log('click_break()')
-      wsManager.sendCommand(this.currentPid, 'break main')
     },
     click_next() {
       console.log('click_next()')
@@ -107,6 +142,16 @@ export default {
     click_step() {
       console.log('click_step()')
       wsManager.sendCommand(this.currentPid, 'step')
+      this.getInfo()
+    },
+    click_nexti() {
+      console.log('click_nexti()')
+      wsManager.sendCommand(this.currentPid, 'nexti')
+      this.getInfo()
+    },
+    click_stepi() {
+      console.log('click_stepi()')
+      wsManager.sendCommand(this.currentPid, 'stepi')
       this.getInfo()
     }
   }

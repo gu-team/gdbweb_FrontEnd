@@ -7,6 +7,7 @@
     </Panel>
     <Panel name="breakpoints">
       Breakpoints
+      <breakpoints slot="content"/>
     </Panel>
     <Panel name="memory">
       Memory
@@ -20,11 +21,13 @@
 
 <script>
 import registerList from '@/components/registerList.vue'
+import breakpoints from '@/components/breakpoints.vue'
 
 export default {
   name: "infoViewew",
   components: {
-    registerList
+    registerList,
+    breakpoints
   },
   data() {
     return {

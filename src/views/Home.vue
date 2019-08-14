@@ -37,7 +37,7 @@ export default {
     // 配置消息提示
     this.$Message.config({
       top: 50,
-      duration: 3
+      duration: 5
     })
     // create websocket when page created
     wsManager.initWebSocket(this)

@@ -6,7 +6,8 @@ Vue.use(Vuex)
 const state = {
   currentPid: -1,
   assmb_data: [], // 汇编代码
-  register_data: [], // 寄存器值
+  register_data: [], // 寄存器数据
+  breakpoint_data: [], // 断点数据
   buttonsDisabled: true,
   loading: false
 }
@@ -24,6 +25,9 @@ const mutations = {
         break
       case 'register':
         state.register_data = data.data
+        break
+      case 'breakpoint':
+        state.breakpoint_data = data.data
         break
       default:
         break
