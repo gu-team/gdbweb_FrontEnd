@@ -35,7 +35,7 @@ import wsManager from '@/api/webSocket.js'
 export default {
   data() {
     return {
-      select: '1',
+      select: '',
       value: '',
       columnsName: [{
         type: 'selection',

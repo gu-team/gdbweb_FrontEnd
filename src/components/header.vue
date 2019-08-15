@@ -1,7 +1,7 @@
 <template>
   <div class="header-wrapper">
     <Upload action="//jsonplaceholder.typicode.com/posts/"
-      style="display:flex;align-items:center;margin-right:20px"
+      style="display:flex;align-items:center;margin-right:30px"
       :before-upload="handleUpload"
       :show-upload-list="false"
       :on-progress="upload_progress"
@@ -14,7 +14,7 @@
 
     <!-- <Input v-model="elf_info" disabled style="width:30%;margin-right:20px"></Input> -->
 
-    <ButtonGroup shape="circle" style="margin-right:10px">
+    <ButtonGroup shape="circle" style="margin-right:30px">
       <Button icon="md-power" @click="click_start" :loading="loading" :disabled="buttonsDisabled">
         <Tooltip content="运行程序，并在main函数入口处停止">
           start
@@ -34,7 +34,7 @@
       </Button>
     </ButtonGroup>
 
-    <ButtonGroup shape="circle" style="margin-right:10px">
+    <ButtonGroup shape="circle" style="">
       <Button icon="md-arrow-round-forward" @click="click_next" :loading="loading" :disabled="buttonsDisabled">
         <Tooltip content="源代码执行下一步">
           next
@@ -60,7 +60,7 @@
       </Button>
     </ButtonGroup>
 
-    <Tooltip content="ELF文件信息">
+    <Tooltip content="ELF文件信息" style="margin-left:auto">
       <Button icon="md-alert" type="info" :loading="loading" :disabled="buttonsDisabled">
         ELF INFO
       </Button>
@@ -75,8 +75,7 @@
   z-index: 999;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 50px;
 }
 </style>
 

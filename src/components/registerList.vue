@@ -21,7 +21,7 @@ export default {
       }, {
         title: 'Hex',
         key: 'Hex',
-        minWidth: 100
+        minWidth: 140
       }, {
         title: 'Dec',
         key: 'Dec',
@@ -77,6 +77,7 @@ export default {
   methods: {
     addRegister(registers, name, hex_num, dec_num) {
       name = name.toUpperCase()
+      hex_num = '0x' + hex_num.slice(2).toUpperCase()
       if (name == 'RIP') {
         registers.unshift({
           name,

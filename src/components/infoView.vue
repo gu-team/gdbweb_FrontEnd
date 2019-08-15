@@ -11,6 +11,7 @@
     </Panel>
     <Panel name="memory">
       Memory
+      <memory slot="content"/>
     </Panel>
     <Panel name="syscall">
       Syscall
@@ -22,12 +23,14 @@
 <script>
 import registerList from '@/components/registerList.vue'
 import breakpoints from '@/components/breakpoints.vue'
+import memory from '@/components/memory.vue'
 
 export default {
   name: "infoViewew",
   components: {
     registerList,
-    breakpoints
+    breakpoints,
+    memory
   },
   data() {
     return {

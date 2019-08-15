@@ -8,6 +8,7 @@ const state = {
   assmb_data: [], // 汇编代码
   register_data: [], // 寄存器数据
   breakpoint_data: [], // 断点数据
+  examine_data: [], // 查询内存数据
   buttonsDisabled: true,
   loading: false
 }
@@ -28,6 +29,9 @@ const mutations = {
         break
       case 'breakpoint':
         state.breakpoint_data = data.data
+        break
+      case 'examine':
+        state.examine_data = data.data
         break
       default:
         break
