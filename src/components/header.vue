@@ -12,6 +12,17 @@
       </Button>
     </Upload>
 
+    <i-switch 
+      style="margin-right:30px"
+      size="large"
+      :value="isAsm"
+      @on-change="switchChange"
+      :loading="loading"
+      :disabled="buttonsDisabled">
+      <span slot="open">汇编</span>
+      <span slot="close">源码</span>
+    </i-switch>
+
     <!-- <Input v-model="elf_info" disabled style="width:30%;margin-right:20px"></Input> -->
 
     <ButtonGroup shape="circle" style="margin-right:30px">
@@ -75,7 +86,7 @@
   z-index: 999;
   display: flex;
   align-items: center;
-  padding: 0 50px;
+  padding: 0 40px;
 }
 </style>
 
@@ -93,6 +104,8 @@ export default {
   },
   computed: {
     ...mapState([
+      'isAsm',
+      'source_data',
       'buttonsDisabled',
       'currentPid',
       'loading'
@@ -116,12 +129,22 @@ export default {
     getInfo() {
       wsManager.sendCommand(this.currentPid, 'disassemble', 'assmb')
       wsManager.sendCommand(this.currentPid, 'info registers', 'register')
-      // wsManager.sendCommand(this.currentPid, 'info breakpoints')
+      wsManager.sendCommand(this.currentPid, 'backtrace', 'backtrace')
     },
     click_start() {
       console.log('click_start()')
       wsManager.sendCommand(this.currentPid, 'start')
+      // wsManager.sendCommand(this.currentPid, 'info breakpoints', 'breakpoint')
+      wsManager.sendCommand(this.currentPid, 'set listsize 10000')
+      wsManager.sendCommand(this.currentPid, 'list 1')
       this.getInfo()
+    },
+    switchChange(status) {
+      this.$store.commit('setIsAsm', status)
+      if (status == false && this.source_data.length == 0) {
+        wsManager.sendCommand(this.currentPid, 'set listsize 10000')
+        wsManager.sendCommand(this.currentPid, 'list 1', 'source')
+      }
     },
     click_run() {
       console.log('click_run()')

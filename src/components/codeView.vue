@@ -1,6 +1,6 @@
 <template>
   <div id="codeView" v-highlight>
-    <pre><code v-html="asmStr"></code></pre>
+    <pre><code v-html="code"></code></pre>
   </div>
 </template>
 
@@ -30,11 +30,36 @@ export default {
   },
   computed: {
     ...mapState([
-      'assmb_data'
+      'assmb_data',
+      'isAsm',
+      'source_data'
     ]),
-    asmStr() {
-      let asmStr = ""
-      let asmStrList = this.assmb_data
+    code() {
+      let code = ""
+      if (this.isAsm) {
+        code = this.getAsm(this.assmb_data)
+      } else {
+        code = this.getSource(this.source_data)
+      }
+      return code
+    }
+  },
+  methods: {
+    getSource(source_data) {
+      let source = ''
+      for (let i = 1; i < source_data.length; i++) {
+        source += source_data[i]
+          .replace(/^\d+\\t/g, i + ' ')
+          .replace(/\\n$/g, '\n')
+          .replace(/\\/g, '')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+      }
+      // console.log(source)
+      return source
+    },
+    getAsm(asmStrList) {
+      let asm = ''
       // console.log('asmStrList --->', asmStrList)
       // 如果获取到的assmb是undefined，或者为空数组，那么asmStrList设为默认
       if (asmStrList == undefined || asmStrList.length == 0)
@@ -43,13 +68,10 @@ export default {
       for (let i = 0; i < asmStrList.length; i++) {
         asmStrList[i] = asmStrList[i].replace(/\\t/g, "\t")
         asmStrList[i] = asmStrList[i].replace(/\\n/g, "\n")
-        asmStr += asmStrList[i]
+        asm += asmStrList[i]
       }
-      // console.log('asmStr --->', asmStr)
-      return asmStr
+      return asm
     }
-  },
-  methods: {
   }
 }
 </script>

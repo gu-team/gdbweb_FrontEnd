@@ -5,10 +5,13 @@ Vue.use(Vuex)
 
 const state = {
   currentPid: -1,
+  isAsm: true, // 是否显示汇编
+  source_data: [], // 源代码
   assmb_data: [], // 汇编代码
   register_data: [], // 寄存器数据
   breakpoint_data: [], // 断点数据
   examine_data: [], // 查询内存数据
+  backtrace_data: [], // 栈帧数据
   buttonsDisabled: true,
   loading: false
 }
@@ -19,6 +22,9 @@ const getters = {}
 const mutations = {
   updateData(state, data) {
     switch (data.data_flag) {
+      case 'source':
+        state.source_data = data.data
+        break
       case 'assmb':
         // state.assmb_data[data.pid] = data.data
         // console.log(state.assmb_data[data.pid])
@@ -32,6 +38,9 @@ const mutations = {
         break
       case 'examine':
         state.examine_data = data.data
+        break
+      case 'backtrace':
+        state.backtrace_data = data.data
         break
       default:
         break
@@ -48,6 +57,9 @@ const mutations = {
   },
   setLoading(state, bool) {
     state.loading = bool
+  },
+  setIsAsm(state, bool) {
+    state.isAsm = bool
   }
 }
 

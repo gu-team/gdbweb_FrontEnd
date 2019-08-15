@@ -26,7 +26,7 @@
     </FormItem>
     <FormItem label="内存地址">
       <Input v-model="formItem.address" placeholder="示例: 0x72032FF,  $rsp"></Input>
-      <span style="font-size:10px; color:#6f6f6f">请输入十六进制地址(如:0x72032FF)，或$+寄存器名字(如:$rsp)</span>
+      <span style="font-size:10px; color:#6f6f6fa6">请输入十六进制地址(如:0x72032FF)，或$+寄存器名字(如:$rsp)</span>
     </FormItem>
   </Form>
 

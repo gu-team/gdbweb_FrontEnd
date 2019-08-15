@@ -1,8 +1,8 @@
 <template>
 <div>
   <div style="display:flex;margin-bottom:20px">
-    <Input v-model="value" style="margin-right:20px">
-      <Select v-model="select" slot="prepend"  placeholder="请选择断点类型" style="width:130px;">
+    <Input v-model="breakValue" style="margin-right:20px">
+      <Select v-model="select" slot="prepend" placeholder="请选择断点类型" style="width:130px;">
         <Option value="1">源代码行号</Option>
         <Option value="2">函数名</Option>
         <Option value="3">汇编十六进制地址</Option>
@@ -14,6 +14,18 @@
       </Tooltip>
     </Button>
   </div>
+
+  <div style="display:flex;">
+    <Input v-model="catchValue" style="margin-right:20px" placeholder="请输入系统调用名称或编号"/>
+    <Button slot="append" icon="md-remove-circle" @click="click_catch" :loading="loading" :disabled="buttonsDisabled">
+      <Tooltip content="设置需要监视的系统调用" max-width="100">
+        catch syscall
+      </Tooltip>
+    </Button>
+  </div>
+
+  <div style="margin-bottom:20px; font-size:10px; color:#6f6f6fa6">系统调用名(如：write)，或系统调用号(如：2，注意不同系统间的区别)</div>
+
   <Table
     stripe
     border
@@ -22,6 +34,7 @@
     :columns="columnsName"
     :data="breakpoints">
   </Table>
+
   <div style="display:flex;justify-content:flex-end;padding-right:20px">
     <Button @click="deleteBreakpoints()" type="success" :disabled="buttonsDisabled">删除已选断点</Button>
   </div>
@@ -36,7 +49,8 @@ export default {
   data() {
     return {
       select: '',
-      value: '',
+      breakValue: '',
+      catchValue: '',
       columnsName: [{
         type: 'selection',
         width: 50,
@@ -106,19 +120,25 @@ export default {
   methods: {
     click_break() {
       console.log('click_break()')
-      // console.log(this.select, this.value)
+      // console.log(this.select, this.breakValue)
       let command = 'break main'
       switch (this.select) {
         case '1':
         case '2':
-          command = 'break ' + this.value
+          command = 'break ' + this.breakValue
           break
         case '3':
-          command = 'break *' + this.value
+          command = 'break *' + this.breakValue
           break
         default:
           break
       }
+      wsManager.sendCommand(this.currentPid, command)
+      wsManager.sendCommand(this.currentPid, 'info breakpoints', 'breakpoint')
+    },
+    click_catch() {
+      console.log('click_break()')
+      let command = 'catch syscall ' + this.catchValue
       wsManager.sendCommand(this.currentPid, command)
       wsManager.sendCommand(this.currentPid, 'info breakpoints', 'breakpoint')
     },
