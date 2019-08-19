@@ -1,16 +1,17 @@
 <template>
   <div class="header-wrapper">
-    <Upload action="//jsonplaceholder.typicode.com/posts/"
+    <Upload action="/api/uploadelf"
       style="display:flex;align-items:center;margin-right:30px"
       :before-upload="handleUpload"
       :show-upload-list="false"
       :on-progress="upload_progress"
       :on-success="upload_success"
       :on-error="upload_error">
-      <Button type="primary" icon="md-cloud-upload" :loading="loading" @click="upload">
-        UPLOAD ELF
+      <Button type="primary" icon="md-cloud-upload" :loading="loading">
+        select file
       </Button>
     </Upload>
+    <Button type="primary" @click="upload" :disabled="upload_button">UPLOAD ELF</Button>
 
     <i-switch 
       style="margin-right:30px"
@@ -99,7 +100,9 @@ export default {
     return {
       select: '',
       value: '',
-      elf_info: 'Please upload elf firstly'
+      elf_info: 'Please upload elf firstly',
+      file: null,
+      upload_button: true
     }
   },
   computed: {
@@ -118,12 +121,30 @@ export default {
     },
     upload_error() {
     },
-    handleUpload() {
+    handleUpload(file) {
+      this.file = file
+      this.upload_button = false
       return false
     },
     upload() {
-      console.log('upload()')
-      wsManager.sendCommand(0, 'uploadelf')
+      // console.log('upload()')
+      // wsManager.sendCommand(0, 'uploadelf')
+      const formData = new FormData()
+      formData.append('file', this.file)
+      fetch('/api/uploadelf', {
+        method: 'POST',
+        body: formData,
+        mode: 'cors',
+      }).then(async res => {
+        const data = await res.json()
+        console.log(data)
+        if(data['status'] == 1){
+          console.log('file')
+          wsManager.sendCommand(0, 'file', data['filename'])
+        }
+      }).catch(err => {
+        console.error(err)
+      })
     },
     // 发送命令，获取相关信息
     getInfo() {

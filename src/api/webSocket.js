@@ -9,7 +9,8 @@ var Vue = null
 
 export default {
   // WebSocket路由
-  WS_URL: 'ws://119.3.93.95:8080/ws/gdb/',
+  // WS_URL: 'ws://119.3.93.95:8080/ws/gdb/',
+  WS_URL: 'ws://192.168.2.120:8000/ws/gdb/',
   ws: null, // WebSocket对象的引用
   // 初始化
   initWebSocket(vue) {
