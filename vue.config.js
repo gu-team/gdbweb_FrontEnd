@@ -6,7 +6,7 @@ module.exports = {
     port: 8000,
     proxy: {
       '/api': {
-        target: 'http://192.168.2.120:8000',
+        target: 'http://dev2.dounine.live:8080',
         changeOrigin: true,
         ws: true
       }

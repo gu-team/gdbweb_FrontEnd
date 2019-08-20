@@ -1,6 +1,10 @@
 <template>
 <div id="infoView">
   <Collapse v-model="panelOpen">
+    <Panel name="input_output">
+      Input & Output
+      <input-output slot="content"/>
+    </Panel>
     <Panel name="registers">
       Registers
       <register-list slot="content"/>
@@ -26,6 +30,7 @@ import registerList from '@/components/registerList.vue'
 import breakpoints from '@/components/breakpoints.vue'
 import memory from '@/components/memory.vue'
 import backtrace from '@/components/backtrace.vue'
+import inputOutput from '@/components/input_output.vue'
 
 export default {
   name: "infoViewew",
@@ -33,11 +38,12 @@ export default {
     registerList,
     breakpoints,
     memory,
-    backtrace
+    backtrace,
+    inputOutput
   },
   data() {
     return {
-      panelOpen: []
+      panelOpen: ['input_output']
     }
   },
   methods: {

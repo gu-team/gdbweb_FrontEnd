@@ -7,22 +7,10 @@
       :on-progress="upload_progress"
       :on-success="upload_success"
       :on-error="upload_error">
-      <Button type="primary" icon="md-cloud-upload" :loading="loading">
-        select file
+      <Button type="primary" icon="md-cloud-upload" :loading="loading" :disabled="uploadDisabled">
+        UPLOAD ELF
       </Button>
     </Upload>
-    <Button type="primary" @click="upload" :disabled="upload_button">UPLOAD ELF</Button>
-
-    <i-switch 
-      style="margin-right:30px"
-      size="large"
-      :value="isAsm"
-      @on-change="switchChange"
-      :loading="loading"
-      :disabled="buttonsDisabled">
-      <span slot="open">汇编</span>
-      <span slot="close">源码</span>
-    </i-switch>
 
     <!-- <Input v-model="elf_info" disabled style="width:30%;margin-right:20px"></Input> -->
 
@@ -46,7 +34,7 @@
       </Button>
     </ButtonGroup>
 
-    <ButtonGroup shape="circle" style="">
+    <ButtonGroup shape="circle" style="margin-right:30px">
       <Button icon="md-arrow-round-forward" @click="click_next" :loading="loading" :disabled="buttonsDisabled">
         <Tooltip content="源代码执行下一步">
           next
@@ -72,6 +60,17 @@
       </Button>
     </ButtonGroup>
 
+    <i-switch 
+      style="margin-right:20px"
+      size="large"
+      :value="isAsm"
+      @on-change="switchChange"
+      :loading="loading"
+      :disabled="buttonsDisabled">
+      <span slot="open">汇编</span>
+      <span slot="close">源码</span>
+    </i-switch>
+
     <Tooltip content="ELF文件信息" style="margin-left:auto">
       <Button icon="md-alert" type="info" :loading="loading" :disabled="buttonsDisabled">
         ELF INFO
@@ -94,15 +93,12 @@
 <script>
 import { mapState } from 'vuex'
 import wsManager from '@/api/webSocket.js'
+import { upload_elf, set_input, get_ouput } from '@/api/http.js'
 
 export default {
   data() {
     return {
-      select: '',
-      value: '',
-      elf_info: 'Please upload elf firstly',
-      file: null,
-      upload_button: true
+      uploadDisabled: false
     }
   },
   computed: {
@@ -111,7 +107,8 @@ export default {
       'source_data',
       'buttonsDisabled',
       'currentPid',
-      'loading'
+      'loading',
+      'files'
     ])
   },
   methods: {
@@ -122,43 +119,67 @@ export default {
     upload_error() {
     },
     handleUpload(file) {
-      this.file = file
-      this.upload_button = false
-      return false
-    },
-    upload() {
-      // console.log('upload()')
-      // wsManager.sendCommand(0, 'uploadelf')
+      console.log('handleUpload()')
+      const file_name = file.name
       const formData = new FormData()
-      formData.append('file', this.file)
-      fetch('/api/uploadelf', {
-        method: 'POST',
-        body: formData,
-        mode: 'cors',
-      }).then(async res => {
-        const data = await res.json()
-        console.log(data)
-        if(data['status'] == 1){
-          console.log('file')
-          wsManager.sendCommand(0, 'file', data['filename'])
+      formData.append('file', file)
+      formData.append('client_id', wsManager.client_id)
+      upload_elf(formData).then(res => {
+        let data = res.data
+        // 返回码不等于0，则表示失败
+        if (data.status != 0) {
+          this.$Message.error(data.msg)
+        } else {
+          this.$store.commit('addFile', file_name, data.file_name)
+          console.log(data.file_name, this.files)
+          this.$Message.success('upload elf file successfully')
+          wsManager.sendCommand(this.currentPid, 'file', '', data.file_name) // 执行file命令
+          this.uploadDisabled = true
         }
       }).catch(err => {
-        console.error(err)
+        this.$Message.error(err)
+        console.log(err)
       })
+      return false
     },
-    // 发送命令，获取相关信息
+    // 发送命令后，获取相关信息
     getInfo() {
       wsManager.sendCommand(this.currentPid, 'disassemble', 'assmb')
       wsManager.sendCommand(this.currentPid, 'info registers', 'register')
       wsManager.sendCommand(this.currentPid, 'backtrace', 'backtrace')
+      get_ouput(this.currentPid).then(res => {
+        let data = res.data
+        // 返回码不等于0，则表示失败
+        if (data.status != 0) {
+          this.$Message.error(data.msg)
+        } else {
+          console.log(data.data)
+          // this.$Message.success(data.msg)
+        }
+      }).catch(err => {
+        this.$Message.error(err)
+        console.log(err)
+      })
     },
     click_start() {
       console.log('click_start()')
-      wsManager.sendCommand(this.currentPid, 'start')
-      // wsManager.sendCommand(this.currentPid, 'info breakpoints', 'breakpoint')
-      wsManager.sendCommand(this.currentPid, 'set listsize 10000')
-      wsManager.sendCommand(this.currentPid, 'list 1')
-      this.getInfo()
+      // 先设置程序输入
+      set_input('1 2', this.currentPid).then(res => {
+        let data = res.data
+        console.log(data)
+        // 返回状态码不等于0，则表示失败
+        if (data.status != 0) {
+          this.$Message.error(data.msg)
+        } else {
+          // this.$Message.success(data.msg)
+          // 再启动程序
+          wsManager.sendCommand(this.currentPid, 'start')
+          this.getInfo()
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$Message.error(err)
+      })
     },
     switchChange(status) {
       this.$store.commit('setIsAsm', status)
@@ -169,8 +190,23 @@ export default {
     },
     click_run() {
       console.log('click_run()')
-      wsManager.sendCommand(this.currentPid, 'run')
-      this.getInfo()
+      // 先设置程序输入
+      set_input('1 2', this.currentPid).then(res => {
+        let data = res.data
+        console.log(data)
+        // 返回状态码不等于0，则表示失败
+        if (data.status != 0) {
+          this.$Message.error(data.msg)
+        } else {
+          // this.$Message.success(data.msg)
+          // 再启动程序
+          wsManager.sendCommand(this.currentPid, 'run')
+          this.getInfo()
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$Message.error(err)
+      })
     },
     click_next() {
       console.log('click_next()')

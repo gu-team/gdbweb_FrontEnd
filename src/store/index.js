@@ -12,6 +12,9 @@ const state = {
   breakpoint_data: [], // 断点数据
   examine_data: [], // 查询内存数据
   backtrace_data: [], // 栈帧数据
+  input_data: '', // 程序输入数据
+  output_data: null, // 程序输出数据
+  files: {}, // 用户上传的文件，key为上传的文件名，value为后端接收后返回的文件名
   buttonsDisabled: true,
   loading: false
 }
@@ -60,6 +63,9 @@ const mutations = {
   },
   setIsAsm(state, bool) {
     state.isAsm = bool
+  },
+  addFile(state, file_name, file_name_backend) {
+    state.files[file_name] = file_name_backend
   }
 }
 

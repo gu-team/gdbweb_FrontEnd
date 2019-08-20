@@ -9,17 +9,19 @@ var Vue = null
 
 export default {
   // WebSocket路由
-  // WS_URL: 'ws://119.3.93.95:8080/ws/gdb/',
-  WS_URL: 'ws://192.168.2.120:8000/ws/gdb/',
-  ws: null, // WebSocket对象的引用
+  WS_URL: 'ws://dev2.dounine.live:8080/ws/gdb/',
+  // WebSocket对象的引用
+  ws: null,
+  // 用户标识
+  client_id: null,
   // 初始化
   initWebSocket(vue) {
     console.log('init websocket')
     Vue = vue
     // generate random client id
-    let client_id = Math.random().toString(36).slice(-8)
+    this.client_id = Math.random().toString(36).slice(-8)
     // connect to backend via websocket
-    this.ws = new WebSocket(this.WS_URL + client_id)
+    this.ws = new WebSocket(this.WS_URL + this.client_id)
     this.ws.onopen = this.websocketOpen
     this.ws.onclose = this.websocketClose
     this.ws.onerror = this.websocketError
@@ -54,17 +56,19 @@ export default {
       if (Vue.$store.state.buttonsDisabled) {
         Vue.$store.commit('enableButtons')
       }
+      // Vue.$Message.success(res.msg)
     }
     Vue.$store.commit('setLoading', false)
   },
   // 发送websocket
-  sendCommand(pid, cmd, flag='') {
+  sendCommand(pid, cmd, flag='', file_name='') {
     Vue.$store.commit('setLoading', true)
     console.log(pid, cmd)
     this.ws.send(JSON.stringify({
       'pid': pid,
       'command_line': cmd,
-      'data_flag': flag
+      'data_flag': flag,
+      'file_name': file_name
     }))
   }
 }
