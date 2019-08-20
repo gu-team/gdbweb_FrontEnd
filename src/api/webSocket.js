@@ -9,7 +9,7 @@ var Vue = null
 
 export default {
   // WebSocket路由
-  WS_URL: 'ws://119.3.93.95:8080/ws/gdb/',
+  WS_URL: 'ws://dev2.dounine.live:8080/ws/gdb/',
   ws: null, // WebSocket对象的引用
   // 初始化
   initWebSocket(vue) {
@@ -57,13 +57,14 @@ export default {
     Vue.$store.commit('setLoading', false)
   },
   // 发送websocket
-  sendCommand(pid, cmd, flag='') {
+  sendCommand(pid, cmd, flag='', input_data='') {
     Vue.$store.commit('setLoading', true)
     console.log(pid, cmd)
     this.ws.send(JSON.stringify({
       'pid': pid,
       'command_line': cmd,
-      'data_flag': flag
+      'data_flag': flag,
+      'input_data': input_data
     }))
   }
 }

@@ -123,7 +123,8 @@ export default {
     },
     upload() {
       console.log('upload()')
-      wsManager.sendCommand(0, 'uploadelf')
+      wsManager.sendCommand(0, 'upload elf')
+      wsManager.sendCommand(this.currentPid, 'file ' + 'demo')
     },
     // 发送命令，获取相关信息
     getInfo() {
@@ -134,10 +135,8 @@ export default {
     click_start() {
       console.log('click_start()')
       wsManager.sendCommand(this.currentPid, 'start')
-      // wsManager.sendCommand(this.currentPid, 'info breakpoints', 'breakpoint')
-      wsManager.sendCommand(this.currentPid, 'set listsize 10000')
-      wsManager.sendCommand(this.currentPid, 'list 1')
       this.getInfo()
+      wsManager.sendCommand(this.currentPid, 'set input', '', '12 20')
     },
     switchChange(status) {
       this.$store.commit('setIsAsm', status)
@@ -155,26 +154,31 @@ export default {
       console.log('click_next()')
       wsManager.sendCommand(this.currentPid, 'next')
       this.getInfo()
+      wsManager.sendCommand(this.currentPid, 'get ouput', 'ouput')
     },
     click_continue() {
       console.log('click_continue()')
       wsManager.sendCommand(this.currentPid, 'continue')
       this.getInfo()
+      wsManager.sendCommand(this.currentPid, 'get ouput', 'ouput')
     },
     click_step() {
       console.log('click_step()')
       wsManager.sendCommand(this.currentPid, 'step')
       this.getInfo()
+      wsManager.sendCommand(this.currentPid, 'get ouput', 'ouput')
     },
     click_nexti() {
       console.log('click_nexti()')
       wsManager.sendCommand(this.currentPid, 'nexti')
       this.getInfo()
+      wsManager.sendCommand(this.currentPid, 'get ouput', 'ouput')
     },
     click_stepi() {
       console.log('click_stepi()')
       wsManager.sendCommand(this.currentPid, 'stepi')
       this.getInfo()
+      wsManager.sendCommand(this.currentPid, 'get ouput', 'ouput')
     }
   }
 }

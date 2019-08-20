@@ -12,6 +12,8 @@ const state = {
   breakpoint_data: [], // 断点数据
   examine_data: [], // 查询内存数据
   backtrace_data: [], // 栈帧数据
+  input_data: '', // 程序输入数据
+  output_data: null, // 程序输出数据
   buttonsDisabled: true,
   loading: false
 }
@@ -41,6 +43,9 @@ const mutations = {
         break
       case 'backtrace':
         state.backtrace_data = data.data
+        break
+      case 'output':
+        state.output_data = data.data
         break
       default:
         break
