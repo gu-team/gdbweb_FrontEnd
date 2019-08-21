@@ -11,17 +11,16 @@
         UPLOAD ELF
       </Button>
     </Upload>
-
-    <!-- <Input v-model="elf_info" disabled style="width:30%;margin-right:20px"></Input> -->
+    <!-- upload button -->
 
     <ButtonGroup shape="circle" style="margin-right:30px">
-      <Button icon="md-power" @click="click_start" :loading="loading" :disabled="buttonsDisabled">
+      <Button icon="md-power" @click="dialogVisible = true;command_temp = 'start'" :loading="loading" :disabled="buttonsDisabled">
         <Tooltip content="运行程序，并在main函数入口处停止">
           start
         </Tooltip>
       </Button>
 
-      <Button icon="md-play" @click="click_run" :loading="loading" :disabled="buttonsDisabled">
+      <Button icon="md-play" @click="dialogVisible = true;command_temp = 'run'" :loading="loading" :disabled="buttonsDisabled">
         <Tooltip content="运行程序">
           run
         </Tooltip>
@@ -33,6 +32,15 @@
         </Tooltip>
       </Button>
     </ButtonGroup>
+    <!-- start run continue button -->
+
+    <el-dialog title="请填写程序输入" :visible.sync="dialogVisible">
+      <Input v-model="input_data" type="textarea" :autosize="{minRows: 6, maxRows: 8}" placeholder="Enter progame input..." />
+      <div slot="footer" class="dialog-footer">
+        <Button type="primary" @click="click_start_run" :loading="loading" :disabled="buttonsDisabled">确 定</Button>
+      </div>
+    </el-dialog>
+    <!-- click start/run button then appear -->
 
     <ButtonGroup shape="circle" style="margin-right:30px">
       <Button icon="md-arrow-round-forward" @click="click_next" :loading="loading" :disabled="buttonsDisabled">
@@ -59,6 +67,7 @@
         </Tooltip>
       </Button>
     </ButtonGroup>
+    <!-- next step netxi stepi button -->
 
     <i-switch 
       style="margin-right:20px"
@@ -70,12 +79,14 @@
       <span slot="open">汇编</span>
       <span slot="close">源码</span>
     </i-switch>
+    <!-- switch -->
 
     <Tooltip content="ELF文件信息" style="margin-left:auto">
       <Button icon="md-alert" type="info" :loading="loading" :disabled="buttonsDisabled">
         ELF INFO
       </Button>
     </Tooltip>
+    <!-- elf info button -->
   </div>
 </template>
 
@@ -98,7 +109,10 @@ import { upload_elf, set_input, get_ouput } from '@/api/http.js'
 export default {
   data() {
     return {
-      uploadDisabled: false
+      dialogVisible: false,
+      uploadDisabled: false,
+      input_data: '',
+      command_temp: ''
     }
   },
   computed: {
@@ -107,17 +121,13 @@ export default {
       'source_data',
       'buttonsDisabled',
       'currentPid',
-      'loading',
-      'files'
+      'loading'
     ])
   },
   methods: {
-    upload_progress() {
-    },
-    upload_success() {
-    },
-    upload_error() {
-    },
+    upload_progress() {},
+    upload_success() {},
+    upload_error() {},
     handleUpload(file) {
       console.log('handleUpload()')
       const file_name = file.name
@@ -154,59 +164,33 @@ export default {
           this.$Message.error(data.msg)
         } else {
           console.log(data.data)
-          // this.$Message.success(data.msg)
+          this.$store.commit('setOutPut', data.data)
         }
       }).catch(err => {
         this.$Message.error(err)
         console.log(err)
       })
     },
-    click_start() {
-      console.log('click_start()')
+    click_start_run() {
+      console.log('click_start_run()')
       // 先设置程序输入
-      set_input('1 2', this.currentPid).then(res => {
+      this.$store.commit('setInPut', this.input_data)
+      set_input(this.input_data, this.currentPid).then(res => {
         let data = res.data
-        console.log(data)
+        // console.log(data)
         // 返回状态码不等于0，则表示失败
         if (data.status != 0) {
           this.$Message.error(data.msg)
         } else {
-          // this.$Message.success(data.msg)
           // 再启动程序
-          wsManager.sendCommand(this.currentPid, 'start')
+          wsManager.sendCommand(this.currentPid, this.command_temp)
           this.getInfo()
         }
       }).catch(err => {
         console.log(err)
         this.$Message.error(err)
       })
-    },
-    switchChange(status) {
-      this.$store.commit('setIsAsm', status)
-      if (status == false && this.source_data.length == 0) {
-        wsManager.sendCommand(this.currentPid, 'set listsize 10000')
-        wsManager.sendCommand(this.currentPid, 'list 1', 'source')
-      }
-    },
-    click_run() {
-      console.log('click_run()')
-      // 先设置程序输入
-      set_input('1 2', this.currentPid).then(res => {
-        let data = res.data
-        console.log(data)
-        // 返回状态码不等于0，则表示失败
-        if (data.status != 0) {
-          this.$Message.error(data.msg)
-        } else {
-          // this.$Message.success(data.msg)
-          // 再启动程序
-          wsManager.sendCommand(this.currentPid, 'run')
-          this.getInfo()
-        }
-      }).catch(err => {
-        console.log(err)
-        this.$Message.error(err)
-      })
+      this.dialogVisible = false
     },
     click_next() {
       console.log('click_next()')
@@ -232,6 +216,13 @@ export default {
       console.log('click_stepi()')
       wsManager.sendCommand(this.currentPid, 'stepi')
       this.getInfo()
+    },
+    switchChange(status) {
+      this.$store.commit('setIsAsm', status)
+      if (status == false && this.source_data.length == 0) {
+        wsManager.sendCommand(this.currentPid, 'set listsize 10000')
+        wsManager.sendCommand(this.currentPid, 'list 1', 'source')
+      }
     }
   }
 }

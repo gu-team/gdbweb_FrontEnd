@@ -66,6 +66,12 @@ const mutations = {
   },
   addFile(state, file_name, file_name_backend) {
     state.files[file_name] = file_name_backend
+  },
+  setOutPut(state, output_data) {
+    state.output_data = output_data
+  },
+  setInPut(state, input_data) {
+    state.input_data = input_data
   }
 }
 

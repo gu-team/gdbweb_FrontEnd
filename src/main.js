@@ -16,6 +16,10 @@ import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 Vue.use(iView)
 
+/* element-ui UI库 */
+import { Dialog } from 'element-ui'
+Vue.use(Dialog)
+
 Vue.config.productionTip = false
 
 new Vue({
