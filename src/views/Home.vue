@@ -1,15 +1,13 @@
 <template>
   <div class="wrapper">
     <div class="header">
-      <head-er :setDisassemble='setDisassemble'/>
+      <head-er/>
     </div>
 
     <div class="main">
       <Split v-model="split">
         <div slot="left" class="code-view">
-          <code-view 
-          :assemb="assemb">
-          </code-view>
+          <code-view/>
         </div>
         <!-- code view -->
 
@@ -26,7 +24,7 @@
 import headEr from '@/components/header'
 import codeView from "@/components/codeView.vue"
 import infoView from "@/components/infoView.vue"
-import { getDisassemble } from '@/api/api.js'
+import wsManager from '@/api/webSocket.js'
 
 export default {
   name: 'home',
@@ -35,22 +33,21 @@ export default {
     codeView,
     infoView
   },
+  created() {
+    // 配置消息提示
+    this.$Message.config({
+      top: 50,
+      duration: 5
+    })
+    // create websocket when page created
+    wsManager.initWebSocket(this)
+  },
   data() {
     return {
-      assemb: [],
       split: 0.6
     }
   },
   methods: {
-    setDisassemble() {
-      getDisassemble('main').then(resp => {
-        console.log('getDisassemble --->', resp.data);
-        this.assemb = resp.data.message;
-      }).catch(error => {
-        console.log(error);
-        this.error(error);
-      });
-    }
   }
 }
 </script>
@@ -76,8 +73,10 @@ export default {
   .code-view {
     height: 100%;
     font-size: 16px;
+    overflow: auto;
   }
   .info-view {
+    height: 100%;
     padding-left: 0.2rem;
     overflow: auto;
   }
