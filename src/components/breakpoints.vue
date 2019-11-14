@@ -7,21 +7,22 @@
         <Option value="2">函数名</Option>
         <Option value="3">汇编十六进制地址</Option>
       </Select>
+      <Button slot="append" icon="md-remove-circle" @click="click_break" :loading="loading" :disabled="buttonsDisabled">
+        <Tooltip content="设置断点">
+          break
+        </Tooltip>
+      </Button>
     </Input>
-    <Button slot="append" icon="md-remove-circle" @click="click_break" :loading="loading" :disabled="buttonsDisabled">
-      <Tooltip content="设置断点">
-        break
-      </Tooltip>
-    </Button>
   </div>
 
   <div style="display:flex;">
-    <Input v-model="catchValue" style="margin-right:20px" placeholder="请输入系统调用名称或编号"/>
-    <Button slot="append" icon="md-remove-circle" @click="click_catch" :loading="loading" :disabled="buttonsDisabled">
-      <Tooltip content="设置需要监视的系统调用" max-width="100">
-        catch syscall
-      </Tooltip>
-    </Button>
+    <Input v-model="catchValue" style="margin-right:20px" placeholder="请输入系统调用名称或编号">
+      <Button slot="append" icon="md-remove-circle" @click="click_catch" :loading="loading" :disabled="buttonsDisabled">
+        <Tooltip content="设置需要监视的系统调用" max-width="100">
+          catch syscall
+        </Tooltip>
+      </Button>
+    </Input>
   </div>
 
   <div style="margin-bottom:20px; font-size:10px; color:#6f6f6fa6">系统调用名(如：write)，或系统调用号(如：2，注意不同系统间的区别)</div>

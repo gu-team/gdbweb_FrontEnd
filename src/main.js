@@ -11,12 +11,12 @@ Vue.use(highlight)
 /* Vue-Router 路由 */
 import router from '@/router/router.js'
 
-/* iveiw UI库 */
+/* iveiw UI 库 */
 import iView from 'iview'
 import 'iview/dist/styles/iview.css'
 Vue.use(iView)
 
-/* element-ui UI库 */
+/* element-ui UI 库的Dialog组件 */
 import { Dialog } from 'element-ui'
 Vue.use(Dialog)
 
