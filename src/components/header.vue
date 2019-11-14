@@ -1,6 +1,6 @@
 <template>
   <div class="header-wrapper">
-    <!-- <Upload action="/api/uploadelf"
+    <Upload action="/api/uploadelf"
       style="display:flex;align-items:center;margin-right:30px"
       :before-upload="handleUpload"
       :show-upload-list="false"
@@ -10,9 +10,9 @@
       <Button type="primary" icon="md-cloud-upload" :loading="loading" :disabled="uploadDisabled">
         UPLOAD ELF
       </Button>
-    </Upload> -->
+    </Upload>
     <!-- upload button -->
-    <Dropdown
+    <!-- <Dropdown
       style="display:flex;align-items:center;margin-right:30px">
       <Button type="primary">
         SELECT DEMO
@@ -21,7 +21,7 @@
       <DropdownMenu slot="list">
         <DropdownItem>helloworld</DropdownItem>
       </DropdownMenu>
-    </Dropdown>
+    </Dropdown> -->
 
     <ButtonGroup shape="circle" style="margin-right:30px">
       <Button icon="md-power" @click="dialogVisible = true;command_temp = 'start'" :loading="loading" :disabled="buttonsDisabled">
