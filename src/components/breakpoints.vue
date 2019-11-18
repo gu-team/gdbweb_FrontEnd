@@ -25,7 +25,7 @@
     </Input>
   </div>
 
-  <div style="margin-bottom:20px; font-size:10px; color:#6f6f6fa6">系统调用名(如：write)，或系统调用号(如：2，注意不同系统间的区别)</div>
+  <div style="margin-bottom:20px; font-size:10px; color:#6f6f6fa6">系统调用名(如:write)，或系统调用号(如:2)，注意不同系统间的区别</div>
 
   <Table
     stripe

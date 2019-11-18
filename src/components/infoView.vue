@@ -43,7 +43,7 @@ export default {
   },
   data() {
     return {
-      panelOpen: ['input_output']
+      panelOpen: ['input_output', 'breakpoints']
     }
   },
   methods: {
